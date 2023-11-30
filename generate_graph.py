@@ -27,7 +27,7 @@ class Graph():
         pprint( self.model.concept_model.text_data[pno])
         # pprint(self.model.match_list[pno])
         print("\n\n")
-        for i in (self.model.match_list[pno]):
+        for i in self.model.match_list[pno]:
 
             # key = list(self.model.match_list[pno].keys())[0]
 
@@ -40,17 +40,20 @@ class Graph():
 
 
                 print("\nSPO on subject")
-                a = []
-                for i in (list(self.model.graph.predicate_objects(subject = j[2]))):
-
-                        a.append((j[2], i[0], i[1] ))
+                a = [
+                    (j[2], i[0], i[1])
+                    for i in (
+                        list(self.model.graph.predicate_objects(subject=j[2]))
+                    )
+                ]
                 pprint(a)
                 print("\nSPO on object")
-                a=[]
-                for i in (list(self.model.graph.subject_predicates(object = j[2]))):
-
-                        a.append((i[0], i[1], j[2]))
-
+                a = [
+                    (i[0], i[1], j[2])
+                    for i in (
+                        list(self.model.graph.subject_predicates(object=j[2]))
+                    )
+                ]
                 pprint(a)
 
                 print("\n\n")

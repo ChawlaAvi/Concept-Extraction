@@ -17,18 +17,15 @@ class Pdf():
 		self.remove_list =[ '(i)','(I)','(II)','(v)','(iv)','(iii)','(ii)','\xad', 
 							'(vi)','(vii)','(viii)','\n','\t']
 
-		for i in string.ascii_letters: 
-
-			self.remove_list.append('('+str(i)+')')					
-		
+		self.remove_list.extend(f'({str(i)})' for i in string.ascii_letters)
 		self.punct_list = ["-","%",":","—",";","+",")","(",'"','”']
 
-		self.regex_punct = re.compile('[%s]' % re.escape(''.join(self.punct_list)))					
+		self.regex_punct = re.compile(f"[{re.escape(''.join(self.punct_list))}]")					
 
 		self.new_paragraph_concepts = []
 
 		self.paragraph_concepts =[]
-		
+
 		self.extract_text()
 		self.find_chunks()
 		self.extract_nouns()
@@ -113,20 +110,18 @@ class Pdf():
 
 				for j in sent:
 
-					if str(j.pos_) == 'NOUN' or str(j.pos_) == 'PROPN':
-		
-						sentence += str(j.text) + " "
-					
-					else:
+					if str(j.pos_) in {'NOUN', 'PROPN'}:
+						
+						sentence += f"{str(j.text)} "
 
-						if sentence != "":
-							
-							chunk = self.add_to_list(sentence)
+					elif sentence != "":
 
-							temp.append(chunk)
-							
-							sentence = ""
-								
+						chunk = self.add_to_list(sentence)
+
+						temp.append(chunk)
+
+						sentence = ""
+
 
 				if sentence != "":
 
@@ -146,25 +141,16 @@ class Pdf():
 
 			spacy_text = self.nlp(text)
 
-			temp = []
-
-			for j in spacy_text.noun_chunks:
-
-				temp.append(j.text)	
-
+			temp = [j.text for j in spacy_text.noun_chunks]
 			self.paragraph_concepts.append(temp)	
 		
 	def get_results(self):
 
-		f=open('concepts2','w')
+		with open('concepts2','w') as f:
+			for i,j in zip(self.new_paragraph_concepts, self.text_data):
 
-		for i,j in zip(self.new_paragraph_concepts, self.text_data):
-
-			f.write(str(j)+'\n')
-			f.write(str(i)+'\n\n')
-		
-
-		f.close()
+				f.write(str(j)+'\n')
+				f.write(str(i)+'\n\n')
 
 
 if __name__ == "__main__":

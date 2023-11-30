@@ -23,14 +23,9 @@ class Relations():
 
             a = i.qname.split(":")
 
-            if a[0] in self.properties:
-
-                self.properties[a[0]].append(a[1])
-
-            else:
-
+            if a[0] not in self.properties:
                 self.properties[a[0]] = []
-                self.properties[a[0]].append(a[1])
+            self.properties[a[0]].append(a[1])
 
 
     def get_classes(self):
@@ -45,14 +40,9 @@ class Relations():
 
 
 
-                if a[0] in self.classes:
-
-                    self.classes[a[0]].append(a[1])
-
-                else:
-
+                if a[0] not in self.classes:
                     self.classes[a[0]] = []
-                    self.classes[a[0]].append(a[1])
+                self.classes[a[0]].append(a[1])
 
 
 if __name__ == "__main__":
